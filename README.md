@@ -1,8 +1,8 @@
-My portfolio site, live at **[utsahai.github.io](https://utsahai.github.io)**.
+My portfolio site, live at **[utsahai.github.io](https://utsahai.github.io)**
 
 ## About this site
 
-A single-page portfolio built to showcase my move into technical product management — the systems I've designed, the products I've shipped, and the impact behind both. No template, no page builder — just HTML, CSS, and JavaScript, written and tuned by hand.
+A single-page portfolio built to showcase my move into technical product management — the systems I've designed, the products I've shipped, and the impact behind both. No template, no page builder — just HTML, CSS, and JavaScript, written and tuned by hand
 
 ## What's inside
 
@@ -19,9 +19,9 @@ A single-page portfolio built to showcase my move into technical product managem
 
 ## Built with
 
-Plain HTML, CSS, and vanilla JavaScript. Type is set in Inter and IBM Plex Mono, loaded from Google Fonts.
+Plain HTML, CSS, and vanilla JavaScript. Type is set in Inter and IBM Plex Mono, loaded from Google Fonts
 
 
 ## Deployment
 
-Hosted free on GitHub Pages, served straight from `main`.
+Hosted free on GitHub Pages, served straight from `main`
