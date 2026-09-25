@@ -1,0 +1,713 @@
+<title>PM Portfolio Template</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  /* ============ TOKENS ============ */
+  :root{
+    --bg:#ffffff;
+    --bg-alt:#faf9f7;
+    --card-bg:#ffffff;
+    --border:#e7e3df;
+    --text:#57534e;
+    --text-strong:#292524;
+    --text-soft:#8a8580;
+    --accent:#fa824c;
+    --accent-dim:#fbe2d3;
+    --sage:#5f8f74;
+    --sage-dim:#dbe9e0;
+    --shadow: 0 20px 40px -24px rgba(41,37,34,.18);
+    --font-sans:'Inter',-apple-system,'Segoe UI',system-ui,sans-serif;
+    --font-mono:'IBM Plex Mono','SF Mono','Fira Code',Consolas,monospace;
+    --font-serif:Georgia,'Times New Roman',serif;
+    --nav-h:100px;
+    --nav-h-scrolled:70px;
+    --container:1080px;
+    --radius:6px;
+    --ease:cubic-bezier(.645,.045,.355,1);
+    color-scheme: light;
+  }
+
+  /* This replica commits to the reference site's fixed light brand identity
+     (warm paper background, sage/orange accent pair) in both OS themes, the
+     same way the source site does not offer a dark mode of its own. */
+
+  *,*::before,*::after{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+    *,*::before,*::after{animation-duration:.001ms !important;transition-duration:.001ms !important;}
+  }
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--text);
+    font-family:var(--font-sans);
+    font-size:17px;
+    line-height:1.7;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,h4{margin:0;font-family:var(--font-sans);color:var(--text-strong);text-wrap:balance;}
+  p{margin:0 0 16px;}
+  a{color:var(--accent);text-decoration:none;}
+  a:hover{text-decoration:underline;}
+  img{max-width:100%;display:block;}
+  ul{margin:0;padding:0;list-style:none;}
+  button{font-family:inherit;cursor:pointer;}
+  :focus-visible{outline:2px solid var(--accent);outline-offset:3px;}
+
+  .wrap{max-width:var(--container);margin:0 auto;padding:0 40px;}
+  @media (max-width:640px){ .wrap{padding:0 24px;} }
+
+  .section{padding:130px 0;border-bottom:1px solid var(--border);}
+  .section.alt{background:var(--bg-alt);}
+  .section:last-of-type{border-bottom:none;}
+  @media (max-width:780px){ .section{padding:90px 0;} }
+
+  .eyebrow{
+    font-family:var(--font-mono);
+    color:var(--accent);
+    font-size:15px;
+    letter-spacing:.5px;
+    margin:0 0 18px;
+  }
+
+  .numbered-heading{
+    display:flex;align-items:center;gap:20px;
+    font-size:clamp(26px,4vw,32px);
+    font-weight:700;
+    margin-bottom:56px;
+    white-space:nowrap;
+  }
+  .numbered-heading::before{
+    content:attr(data-num);
+    font-family:var(--font-mono);
+    color:var(--accent);
+    font-weight:500;
+    font-size:clamp(16px,2.4vw,20px);
+  }
+  .numbered-heading::after{
+    content:'';
+    height:1px;
+    width:100%;
+    background:var(--border);
+    display:block;
+  }
+
+  .btn{
+    display:inline-flex;align-items:center;gap:10px;
+    font-family:var(--font-mono);
+    font-size:14px;
+    color:var(--accent);
+    border:1px solid var(--accent);
+    border-radius:var(--radius);
+    padding:18px 26px;
+    background:transparent;
+    transition:transform .2s var(--ease),background .2s var(--ease),color .2s var(--ease);
+  }
+  .btn:hover{background:var(--accent-dim);text-decoration:none;transform:translateY(-3px);}
+
+  /* ============ NAV ============ */
+  header{
+    position:fixed;top:0;left:0;right:0;z-index:50;
+    height:var(--nav-h);
+    display:flex;align-items:center;
+    background:rgba(255,255,255,.85);
+    backdrop-filter:blur(8px);
+    -webkit-backdrop-filter:blur(8px);
+    transition:height .3s var(--ease),box-shadow .3s var(--ease);
+  }
+  header.scrolled{height:var(--nav-h-scrolled);box-shadow:0 8px 24px -18px rgba(41,37,34,.25);}
+  header .wrap{display:flex;align-items:center;justify-content:space-between;width:100%;}
+  .logo{display:flex;align-items:center;gap:10px;}
+  .logo svg{height:38px;width:auto;}
+  .logo-type{font-family:var(--font-mono);font-size:11px;letter-spacing:1.5px;color:var(--text-soft);line-height:1.3;}
+  .logo-type b{display:block;color:var(--text-strong);font-size:12px;letter-spacing:1.5px;}
+
+  nav.primary{display:flex;align-items:center;gap:36px;}
+  nav.primary ol{display:flex;gap:36px;counter-reset:navitem;}
+  nav.primary li{counter-increment:navitem;}
+  nav.primary a{
+    font-family:var(--font-mono);font-size:14px;color:var(--text-strong);
+    display:flex;gap:6px;align-items:baseline;
+  }
+  nav.primary a::before{content:"0" counter(navitem) ".";color:var(--accent);font-size:12px;}
+  nav.primary a.is-active,nav.primary a:hover{color:var(--accent);text-decoration:none;}
+  nav.primary .btn{padding:12px 18px;}
+
+  .hamburger{display:none;background:none;border:0;padding:8px;z-index:60;}
+  .hamburger .box{width:28px;height:20px;position:relative;}
+  .hamburger .bar,.hamburger .bar::before,.hamburger .bar::after{
+    content:'';position:absolute;left:0;width:28px;height:2px;background:var(--accent);
+    transition:transform .22s var(--ease),top .18s var(--ease),opacity .18s var(--ease);
+  }
+  .hamburger .bar{top:9px;}
+  .hamburger .bar::before{top:-9px;}
+  .hamburger .bar::after{top:9px;}
+  .hamburger[aria-expanded="true"] .bar{background:transparent;}
+  .hamburger[aria-expanded="true"] .bar::before{top:0;transform:rotate(45deg);background:var(--accent);}
+  .hamburger[aria-expanded="true"] .bar::after{top:0;transform:rotate(-45deg);background:var(--accent);}
+
+  .mobile-menu{
+    position:fixed;inset:0;z-index:55;
+    background:#fffdfb;
+    display:flex;align-items:center;justify-content:center;
+    transform:translateX(100%);
+    transition:transform .35s var(--ease);
+  }
+  .mobile-menu.open{transform:translateX(0);}
+  .mobile-menu ol{display:flex;flex-direction:column;gap:28px;text-align:center;counter-reset:mnav;}
+  .mobile-menu li{counter-increment:mnav;}
+  .mobile-menu a{font-family:var(--font-mono);font-size:20px;color:var(--text-strong);}
+  .mobile-menu a::before{content:"0" counter(mnav) ". ";color:var(--accent);}
+  .mobile-menu .btn{margin-top:16px;}
+
+  @media (max-width:900px){
+    nav.primary{display:none;}
+    .hamburger{display:block;}
+  }
+
+  /* ============ HERO ============ */
+  #intro{
+    min-height:min(88vh,780px);
+    display:flex;flex-direction:column;justify-content:center;
+    padding-top:var(--nav-h);
+    border-bottom:1px solid var(--border);
+  }
+  #intro .eyebrow{font-size:17px;}
+  .hero-name{
+    font-size:clamp(38px,7vw,72px);
+    font-weight:700;color:var(--sage);
+    margin-bottom:4px;
+  }
+  .hero-tagline{
+    font-size:clamp(32px,6vw,62px);
+    font-weight:700;color:var(--accent);
+    margin-bottom:28px;
+  }
+  .hero-copy{max-width:560px;font-size:18px;}
+  .hero-copy .ph{border-bottom:1px dashed var(--accent);}
+  #intro .btn{margin-top:34px;}
+
+  /* ============ ABOUT ============ */
+  .about-grid{display:grid;grid-template-columns:1.3fr 1fr;gap:64px;align-items:start;}
+  @media (max-width:820px){ .about-grid{grid-template-columns:1fr;} }
+  .about-copy p{max-width:60ch;}
+  .about-copy strong{color:var(--text-strong);}
+  .skills{
+    display:grid;grid-template-columns:1fr 1fr;gap:10px 24px;
+    margin-top:8px;
+  }
+  .skills li{
+    font-family:var(--font-mono);font-size:14px;color:var(--text);
+    display:flex;gap:10px;align-items:flex-start;
+  }
+  .skills li::before{content:"▹";color:var(--accent);flex:none;}
+  .about-heading{font-size:15px;letter-spacing:.5px;font-family:var(--font-mono);color:var(--text-soft);margin:36px 0 4px;text-transform:uppercase;}
+  .about-heading:first-of-type{margin-top:0;}
+
+  /* ============ JOBS ============ */
+  .jobs{display:grid;grid-template-columns:220px 1fr;gap:0 40px;}
+  @media (max-width:720px){ .jobs{grid-template-columns:1fr;} }
+  .job-tabs{display:flex;flex-direction:row;overflow-x:auto;border-bottom:2px solid var(--border);
+    @media (max-width:720px){}
+  }
+  @media (min-width:721px){
+    .job-tabs{flex-direction:column;border-bottom:none;border-left:2px solid var(--border);}
+  }
+  .job-tab{
+    font-family:var(--font-mono);font-size:14px;text-align:left;
+    background:none;border:none;padding:14px 20px;color:var(--text-soft);
+    white-space:nowrap;position:relative;transition:color .2s var(--ease),background .2s var(--ease);
+  }
+  .job-tab:hover{color:var(--accent);background:var(--bg-alt);}
+  .job-tab.active{color:var(--accent);background:var(--accent-dim);}
+  .job-tab::before{
+    content:'';position:absolute;left:0;bottom:-2px;height:2px;width:100%;background:var(--accent);
+    transform:scaleX(0);transition:transform .25s var(--ease);
+  }
+  @media (min-width:721px){
+    .job-tab{padding:14px 22px;}
+    .job-tab::before{left:-2px;top:0;bottom:0;height:100%;width:2px;transform:scaleY(0);transform-origin:top;}
+    .job-tab.active::before{transform:scaleY(1);}
+  }
+  .job-tab.active::before{transform:scaleX(1);}
+
+  .job-panel{display:none;padding-top:4px;}
+  .job-panel.active{display:block;animation:fadein .4s var(--ease);}
+  @keyframes fadein{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+  .job-role{font-size:22px;font-weight:700;margin-bottom:2px;}
+  .job-role .co{color:var(--accent);}
+  .job-dates{font-family:var(--font-mono);font-size:13px;color:var(--text-soft);margin-bottom:20px;display:block;}
+  .job-list li{position:relative;padding-left:26px;margin-bottom:14px;font-size:16px;}
+  .job-list li::before{content:"▹";position:absolute;left:0;color:var(--accent);}
+
+  /* ============ FEATURED PROJECTS ============ */
+  .featured{display:flex;flex-direction:column;gap:120px;}
+  .feature{display:grid;grid-template-columns:1.1fr .9fr;gap:0 40px;align-items:center;}
+  .feature:nth-child(even) .feature-media{order:2;}
+  .feature:nth-child(even) .feature-copy{order:1;text-align:right;}
+  .feature:nth-child(even) .feature-copy .tags{justify-content:flex-end;}
+  .feature:nth-child(even) .feature-copy .links{justify-content:flex-end;}
+  @media (max-width:860px){
+    .feature,.feature:nth-child(even) .feature-copy{grid-template-columns:1fr;text-align:left !important;}
+    .feature:nth-child(even) .feature-media{order:0;}
+    .feature:nth-child(even) .feature-copy{order:0;}
+    .feature .tags,.feature:nth-child(even) .tags,.feature .links,.feature:nth-child(even) .links{justify-content:flex-start !important;}
+    .feature{gap:24px;}
+  }
+  .feature-media{
+    position:relative;border-radius:10px;overflow:hidden;
+    aspect-ratio:4/3;
+    background:linear-gradient(135deg,var(--sage-dim),var(--accent-dim));
+    box-shadow:var(--shadow);
+  }
+  .feature-media .glyph{
+    position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+    font-family:var(--font-mono);font-size:15px;color:var(--text-soft);letter-spacing:1px;
+  }
+  .feature-label{font-family:var(--font-mono);color:var(--accent);font-size:14px;margin-bottom:12px;}
+  .feature-title{font-size:28px;font-weight:700;margin-bottom:18px;}
+  .feature-desc{
+    background:var(--card-bg);border:1px solid var(--border);
+    padding:26px 28px;border-radius:8px;box-shadow:var(--shadow);
+    font-size:16px;margin-bottom:18px;
+  }
+  .tags{display:flex;flex-wrap:wrap;gap:10px 16px;font-family:var(--font-mono);font-size:13px;color:var(--text-soft);margin-bottom:16px;}
+  .links{display:flex;gap:20px;font-family:var(--font-mono);font-size:14px;}
+  .links a{color:var(--text-strong);display:flex;align-items:center;gap:6px;}
+  .links a:hover{color:var(--accent);}
+
+  /* ============ HIGHLIGHTS GRID ============ */
+  .grid-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;}
+  @media (max-width:900px){ .grid-cards{grid-template-columns:repeat(2,1fr);} }
+  @media (max-width:620px){ .grid-cards{grid-template-columns:1fr;} }
+  .mini-card{
+    background:var(--card-bg);border:1px solid var(--border);border-radius:8px;
+    padding:28px;display:flex;flex-direction:column;height:100%;
+    transition:transform .25s var(--ease),box-shadow .25s var(--ease);
+  }
+  .mini-card:hover{transform:translateY(-6px);box-shadow:var(--shadow);}
+  .mini-card-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:20px;}
+  .folder-icon{color:var(--accent);}
+  .mini-card h3{font-size:19px;margin-bottom:10px;}
+  .mini-card p{font-size:15px;flex:1;}
+  .mini-tags{display:flex;flex-wrap:wrap;gap:6px 14px;font-family:var(--font-mono);font-size:12px;color:var(--text-soft);margin-top:16px;}
+
+  /* ============ ACHIEVEMENTS & HOBBIES ============ */
+  /* Reuses .about-grid / .job-list / .skills from the About section. */
+
+  /* ============ CONTACT ============ */
+  #contact{text-align:center;padding-bottom:160px;}
+  #contact .wrap{max-width:640px;}
+  #contact .eyebrow{justify-content:center;font-size:17px;}
+  #contact h2{font-size:clamp(30px,6vw,52px);margin-bottom:24px;}
+  #contact p{font-size:18px;}
+  #contact .btn{margin-top:24px;padding:20px 34px;font-size:15px;}
+
+  /* ============ FOOTER ============ */
+  footer{padding:40px 0;text-align:center;}
+  .social-row{display:flex;justify-content:center;gap:24px;margin-bottom:18px;}
+  .social-row a{color:var(--text-soft);}
+  .social-row a:hover{color:var(--accent);}
+  footer .credit{font-family:var(--font-mono);font-size:12px;color:var(--text-soft);}
+  footer .credit a{color:var(--text-soft);text-decoration:underline;text-underline-offset:3px;}
+
+  /* ============ REVEAL ANIM ============ */
+  .reveal{opacity:1;transform:none;}
+  .reveal.pending{opacity:0;transform:translateY(24px);}
+  .reveal.in{opacity:1;transform:translateY(0);transition:opacity .6s var(--ease),transform .6s var(--ease);}
+
+</style>
+
+<header id="site-header">
+  <div class="wrap">
+    <a href="#intro" class="logo" aria-label="Home">
+      <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+        <rect width="64" height="64" rx="15" fill="var(--accent)"/>
+        <path d="M64 64H32L64 32Z" fill="var(--sage)"/>
+        <text x="10" y="42" font-family="Inter,-apple-system,sans-serif" font-weight="800" font-size="25" letter-spacing="-1" fill="#fff">US</text>
+      </svg>
+      <span class="logo-type">UTKARSH<b>SAHAI</b></span>
+    </a>
+
+    <nav class="primary" aria-label="Primary">
+      <ol>
+        <li><a href="#about" class="nav-link" data-target="about">About</a></li>
+        <li><a href="#jobs" class="nav-link" data-target="jobs">Experience</a></li>
+        <li><a href="#projects" class="nav-link" data-target="projects">Work</a></li>
+        <li><a href="#achievements" class="nav-link" data-target="achievements">Achievements</a></li>
+        <li><a href="#contact" class="nav-link" data-target="contact">Contact</a></li>
+      </ol>
+      <a class="btn" href="Utkarshsahai.pdf" data-resume-link>Resume</a>
+    </nav>
+
+    <button class="hamburger" id="hamburgerBtn" aria-expanded="false" aria-label="Toggle menu">
+      <div class="box"><div class="bar"></div></div>
+    </button>
+  </div>
+</header>
+
+<div class="mobile-menu" id="mobileMenu">
+  <nav aria-label="Mobile">
+    <ol>
+      <li><a href="#about">About</a></li>
+      <li><a href="#jobs">Experience</a></li>
+      <li><a href="#projects">Work</a></li>
+      <li><a href="#achievements">Achievements</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ol>
+    <a class="btn" href="Utkarshsahai.pdf" data-resume-link>Resume</a>
+  </nav>
+</div>
+
+<main id="content">
+
+  <section id="intro" class="wrap">
+    <p class="eyebrow">Hi, my name is</p>
+    <h1 class="hero-name">Utkarsh Sahai.</h1>
+    <h2 class="hero-tagline">I turn ambiguous problems into shipped products.</h2>
+    <div class="hero-copy">
+      <p>I'm a Technical Product Manager transitioning from backend engineering. At Accenture, I led end-to-end delivery of a real-time batch-tracking platform monitoring 4M+ items across 21 manufacturing facilities, and pivoted an underused internal chatbot into a self-service tool that cut team workload by 35%. I'm now applying that same systems thinking to product strategy — drafting PRDs, running structured mock interviews, and building AI-driven product tools from the ground up.</p>
+    </div>
+    <a href="Utkarshsahai.pdf" data-resume-link class="btn">Check out my Resume</a>
+  </section>
+
+  <section id="about" class="section">
+    <div class="wrap">
+      <h2 class="numbered-heading" data-num="01.">About Me</h2>
+      <div class="about-grid">
+        <div class="about-copy">
+          <p>Hi, I'm Utkarsh. I'm a backend engineer turned Technical Product Manager, based in Gurugram, India.</p>
+          <p>I spent close to three years at Accenture building systems at scale: a real-time batch-tracking platform monitoring 4 million+ items across 21 manufacturing facilities, and a run of automation tools and API integrations that cut manual work across support and infrastructure teams. I left in March 2026 to make the shift into product full-time.</p>
+          <p>I care about grounding product decisions in technical reality — what's actually feasible to build, what the data model needs to support, and what an API can and can't do. That's the lens I bring to product strategy: same discipline, different lever.</p>
+          <p>Right now, that means drafting PRDs, running structured mock interviews, and building AI-driven product tools to show the work, not just talk about it.</p>
+        </div>
+        <div>
+          <p class="about-heading">Product skills</p>
+          <ul class="skills">
+            <li>AI product strategy &amp; roadmapping</li>
+            <li>Requirements gathering &amp; PRDs</li>
+            <li>Agile &amp; Scrum delivery</li>
+            <li>Cross-functional stakeholder mgmt</li>
+            <li>API &amp; system design</li>
+            <li>Technical documentation</li>
+          </ul>
+          <p class="about-heading">Technical skills</p>
+          <ul class="skills">
+            <li>Python (FastAPI, Django, Flask)</li>
+            <li>SQL &amp; data modeling</li>
+            <li>REST API design</li>
+            <li>LLM / OpenAI API integration</li>
+            <li>PostgreSQL &amp; Neo4j</li>
+            <li>Cloud infrastructure (Azure)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="jobs" class="section alt">
+    <div class="wrap">
+      <h2 class="numbered-heading" data-num="02.">Where I've Worked</h2>
+      <div class="jobs">
+        <div class="job-tabs" role="tablist" aria-label="Job tabs">
+          <button class="job-tab active" role="tab" aria-selected="true" data-job="0">Accenture, Gurugram</button>
+          <button class="job-tab" role="tab" aria-selected="false" data-job="1">Accenture, Bengaluru</button>
+        </div>
+        <div class="job-panels">
+          <div class="job-panel active" data-job-panel="0">
+            <h3 class="job-role">Web Developer, Analyst @ <span class="co">Accenture</span></h3>
+            <span class="job-dates">Feb 2023 – Mar 2026</span>
+            <ul class="job-list">
+              <li><strong>Batch Tracking System</strong> (Python, FastAPI, Neo4j, PostgreSQL, Azure): Partnered cross-functionally with plant stakeholders, the ETL team, and the product owner to define exactly what data mattered for tracking a batch, then led end-to-end delivery of a secure, real-time system restricted to authorized users. Cut data retrieval time by 30%; adopted across 12 of 21 manufacturing facilities, replacing manual SAP lookups.</li>
+              <li><strong>TLM Chatbot</strong> (Django, PostgreSQL, Python, Azure): Pivoted an underused Q&amp;A chatbot into a self-service Total Lifecycle Management tool for resource deployment, patching, and migration. In-chat incident creation and automated data-gathering cut team workload by 35%.</li>
+              <li><strong>ServiceNow Integration APIs</strong> (Python, REST, ServiceNow, AppDynamics): Engineered the ServiceNow–AppDynamics integration and the API design standard adopted across 10+ integrations, unifying visibility across 1,200+ enterprise assets and cutting manual intervention by 45%.</li>
+              <li><strong>Automation &amp; Cloud Ops</strong> (Python, Rundeck, Ansible, ServiceNow): Automated provisioning, incident, and change workflows across dual-stack (IPv4/IPv6) infrastructure, cutting incident resolution time by 25%.</li>
+            </ul>
+          </div>
+          <div class="job-panel" data-job-panel="1">
+            <h3 class="job-role">Python Developer, Associate @ <span class="co">Accenture</span></h3>
+            <span class="job-dates">Jun 2021 – Jan 2023</span>
+            <ul class="job-list">
+              <li><strong>Web Application Automation</strong> (Python, Selenium): Automated application support processes across teams, freeing up 150 hours of repetitive work every month.</li>
+              <li><strong>CI/CD Web Deployment</strong> (Python, Jenkins, Ansible): Designed and deployed secure CI/CD pipelines, enabling zero-downtime deployments that were 30% faster.</li>
+              <li><strong>Collaborative Python Projects</strong> (Python): Led 3 cross-team automation initiatives with 8–18 member teams, coordinating backend development and code reviews that lifted workflow efficiency by 40%.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="projects" class="section">
+    <div class="wrap">
+      <h2 class="numbered-heading" data-num="03.">Featured Work</h2>
+      <div class="featured">
+        <article class="feature reveal pending">
+          <div class="feature-media"><span class="glyph">[ Batch Tracking System ]</span></div>
+          <div class="feature-copy">
+            <p class="feature-label">Featured Project</p>
+            <h3 class="feature-title">Batch Tracking System</h3>
+            <div class="feature-desc">
+              <p>Manufacturing plants for an animal health client were relying on manual SAP lookups to track batches — slow, and prone to error. I partnered with plant stakeholders, the ETL team, and the product owner to scope exactly what needed tracking, then led end-to-end delivery of a real-time system on FastAPI, Neo4j, and PostgreSQL. It cut data retrieval time by 30% and now runs across 12 of 21 manufacturing facilities, monitoring 4 million+ items.</p>
+            </div>
+            <div class="tags">
+              <span>Product Scoping</span><span>Stakeholder Mgmt</span><span>System Design</span><span>FastAPI</span><span>Neo4j</span><span>Azure</span>
+            </div>
+            <div class="links">
+              <span style="color:var(--text-soft);font-family:var(--font-mono);font-size:13px;">Internal platform for an animal health manufacturing client — not publicly accessible</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="feature reveal pending">
+          <div class="feature-media"><span class="glyph">[ TLM Chatbot ]</span></div>
+          <div class="feature-copy">
+            <p class="feature-label">Featured Project</p>
+            <h3 class="feature-title">TLM Chatbot</h3>
+            <div class="feature-desc">
+              <p>An internal Q&amp;A chatbot for stakeholders at an automotive client — meant to let them look up their own applications' status and info directly — was underused because it only answered questions and didn't help anyone get work done. I identified the gap and pivoted it into a self-service Total Lifecycle Management tool, adding in-chat incident creation and automated data-gathering for resource deployment, patching, and migration. The redesign cut team workload by 35%.</p>
+            </div>
+            <div class="tags">
+              <span>Product Pivot</span><span>Requirements Gathering</span><span>Django</span><span>PostgreSQL</span><span>Process Design</span>
+            </div>
+            <div class="links">
+              <span style="color:var(--text-soft);font-family:var(--font-mono);font-size:13px;">Internal platform for an automotive client — not publicly accessible</span>
+            </div>
+          </div>
+        </article>
+      </div>
+
+      <h3 class="about-heading" style="margin-top:120px;font-size:15px;">Additional recent highlights</h3>
+      <div class="grid-cards" style="margin-top:24px;">
+        <div class="mini-card reveal pending">
+          <div class="mini-card-top">
+            <svg class="folder-icon" width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7z"/></svg>
+          </div>
+          <h3>ServiceNow Integration APIs</h3>
+          <p>Engineered the ServiceNow–AppDynamics integration and API design standard, unifying visibility across 1,200+ enterprise assets and cutting manual intervention by 45%.</p>
+          <div class="mini-tags"><span>Python</span><span>REST</span><span>AppDynamics</span></div>
+        </div>
+        <div class="mini-card reveal pending">
+          <div class="mini-card-top">
+            <svg class="folder-icon" width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7z"/></svg>
+          </div>
+          <h3>Automation &amp; Cloud Ops</h3>
+          <p>Automated provisioning, incident, and change workflows across dual-stack (IPv4/IPv6) infrastructure, cutting incident resolution time by 25%.</p>
+          <div class="mini-tags"><span>Rundeck</span><span>Ansible</span><span>ServiceNow</span></div>
+        </div>
+        <div class="mini-card reveal pending">
+          <div class="mini-card-top">
+            <svg class="folder-icon" width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7z"/></svg>
+          </div>
+          <h3>CI/CD Web Deployment</h3>
+          <p>Designed and deployed secure CI/CD pipelines for web applications, enabling zero-downtime deployments that were 30% faster.</p>
+          <div class="mini-tags"><span>Jenkins</span><span>Ansible</span><span>Python</span></div>
+        </div>
+        <div class="mini-card reveal pending">
+          <div class="mini-card-top">
+            <svg class="folder-icon" width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7z"/></svg>
+          </div>
+          <h3>Web Application Automation</h3>
+          <p>Automated application support processes across teams using Selenium, freeing up 150 hours of repetitive work every month.</p>
+          <div class="mini-tags"><span>Python</span><span>Selenium</span></div>
+        </div>
+        <div class="mini-card reveal pending">
+          <div class="mini-card-top">
+            <svg class="folder-icon" width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7z"/></svg>
+          </div>
+          <h3>Collaborative Python Projects</h3>
+          <p>Led 3 cross-team automation initiatives with 8–18 member teams, coordinating backend development and code reviews that lifted workflow efficiency by 40%.</p>
+          <div class="mini-tags"><span>Python</span><span>Leadership</span></div>
+        </div>
+        <div class="mini-card reveal pending">
+          <div class="mini-card-top">
+            <svg class="folder-icon" width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7z"/></svg>
+          </div>
+          <h3>Recognition &amp; Achievements</h3>
+          <p>Earned "Best Performer" twice in three months and Accenture's "ACE Award" for high-impact automation and development work.</p>
+          <div class="mini-tags"><span>Accenture</span><span>2021–2026</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="achievements" class="section alt">
+    <div class="wrap">
+      <h2 class="numbered-heading" data-num="04.">Achievements</h2>
+      <div class="about-copy" style="max-width:640px;">
+        <ul class="job-list">
+          <li><strong>Best Performer</strong> — earned twice within three months for delivering high-impact automation and development initiatives.</li>
+          <li><strong>Accenture ACE Award</strong> — recognized for exceptional dedication and being a key catalyst in driving high-impact solutions.</li>
+          <li>Recognized for building automation tools and chatbot products that strengthened operational efficiency and streamlined developer processes.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact" class="section">
+    <div class="wrap">
+      <p class="eyebrow">What's Next?</p>
+      <h2>Get In Touch</h2>
+      <p>I'm currently completing my transition into product management — open to Technical PM, AI PM, and Associate PM roles, and always up for a conversation about product, systems, or where the two meet.</p>
+      <a class="btn" href="mailto:utkarshsahai22@gmail.com" target="_top">Say Hi</a>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="social-row">
+    <a href="#" data-placeholder-link aria-label="LinkedIn">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M20.5 2h-17A1.5 1.5 0 0 0 2 3.5v17A1.5 1.5 0 0 0 3.5 22h17a1.5 1.5 0 0 0 1.5-1.5v-17A1.5 1.5 0 0 0 20.5 2zM8 19H5v-9h3zM6.5 8.7A1.7 1.7 0 1 1 8.2 7a1.7 1.7 0 0 1-1.7 1.7zM19 19h-3v-4.7c0-1.1 0-2.6-1.6-2.6s-1.8 1.2-1.8 2.5V19h-3v-9h2.9v1.3a3.2 3.2 0 0 1 2.9-1.6c3.1 0 3.6 2 3.6 4.7z"/></svg>
+    </a>
+    <a href="#" data-placeholder-link aria-label="GitHub">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-3.16 19.49c.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.46-1.16-1.11-1.47-1.11-1.47-.9-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.9 1.52 2.34 1.08 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.56-1.11-4.56-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.65 0 0 .84-.27 2.75 1.02a9.4 9.4 0 0 1 5 0c1.91-1.3 2.75-1.02 2.75-1.02.55 1.38.2 2.4.1 2.65.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.68-4.57 4.93.36.31.68.92.68 1.85v2.75c0 .27.18.58.69.48A10 10 0 0 0 12 2z"/></svg>
+    </a>
+    <a href="mailto:utkarshsahai22@gmail.com" target="_top" aria-label="Email">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 6h18v12H3z"/><path d="M3 7l9 6 9-6"/></svg>
+    </a>
+  </div>
+  <p class="credit">Designed &amp; built by Utkarsh Sahai</p>
+</footer>
+
+<script>
+(function(){
+  // Header shrink on scroll
+  var header = document.getElementById('site-header');
+  function onScroll(){
+    if(window.scrollY > 40){ header.classList.add('scrolled'); } else { header.classList.remove('scrolled'); }
+  }
+  document.addEventListener('scroll', onScroll, {passive:true});
+  onScroll();
+
+  // Mobile menu
+  var hamburger = document.getElementById('hamburgerBtn');
+  var mobileMenu = document.getElementById('mobileMenu');
+  hamburger.addEventListener('click', function(){
+    var open = mobileMenu.classList.toggle('open');
+    hamburger.setAttribute('aria-expanded', open ? 'true':'false');
+  });
+  mobileMenu.querySelectorAll('a').forEach(function(a){
+    a.addEventListener('click', function(){
+      mobileMenu.classList.remove('open');
+      hamburger.setAttribute('aria-expanded','false');
+    });
+  });
+
+  // Placeholder links: prevent navigation, gentle nudge
+  document.querySelectorAll('[data-placeholder-link]').forEach(function(a){
+    a.addEventListener('click', function(e){
+      e.preventDefault();
+    });
+  });
+
+  // Active nav link on scroll
+  var navLinks = document.querySelectorAll('.nav-link');
+  var sections = ['about','jobs','projects','achievements','contact'].map(function(id){return document.getElementById(id);});
+  function updateActive(){
+    var pos = window.scrollY + window.innerHeight/3;
+    var current = null;
+    sections.forEach(function(sec){ if(sec && sec.offsetTop <= pos) current = sec.id; });
+    navLinks.forEach(function(l){
+      l.classList.toggle('is-active', l.dataset.target === current);
+    });
+  }
+  document.addEventListener('scroll', updateActive, {passive:true});
+  updateActive();
+
+  // Job tabs
+  var tabs = document.querySelectorAll('.job-tab');
+  var panels = document.querySelectorAll('.job-panel');
+  tabs.forEach(function(tab){
+    tab.addEventListener('click', function(){
+      tabs.forEach(function(t){t.classList.remove('active'); t.setAttribute('aria-selected','false');});
+      panels.forEach(function(p){p.classList.remove('active');});
+      tab.classList.add('active'); tab.setAttribute('aria-selected','true');
+      document.querySelector('.job-panel[data-job-panel="'+tab.dataset.job+'"]').classList.add('active');
+    });
+  });
+
+  // Scroll reveal
+  var revealEls = document.querySelectorAll('.reveal');
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if('IntersectionObserver' in window && !reduceMotion){
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if(entry.isIntersecting){
+          entry.target.classList.remove('pending');
+          entry.target.classList.add('in');
+          io.unobserve(entry.target);
+        }
+      });
+    }, {threshold:0.15});
+    revealEls.forEach(function(el){ io.observe(el); });
+  } else {
+    revealEls.forEach(function(el){ el.classList.remove('pending'); el.classList.add('in'); });
+  }
+
+  // Mailto links can silently no-op when the browser/OS has no default mail
+  // app registered — copy the address to the clipboard and show a toast so
+  // the click always does something visible, whether or not a mail app opens.
+  function showToast(message){
+    var toast = document.createElement('div');
+    toast.textContent = message;
+    toast.style.cssText = [
+      'position:fixed','left:50%','bottom:32px','transform:translateX(-50%) translateY(8px)',
+      'background:var(--text-strong)','color:#fff','font-family:var(--font-mono)','font-size:13px',
+      'padding:10px 18px','border-radius:6px','z-index:999','opacity:0',
+      'transition:opacity .25s var(--ease),transform .25s var(--ease)','pointer-events:none',
+      'box-shadow:var(--shadow)'
+    ].join(';');
+    document.body.appendChild(toast);
+    requestAnimationFrame(function(){ toast.style.opacity='1'; toast.style.transform='translateX(-50%) translateY(0)'; });
+    setTimeout(function(){
+      toast.style.opacity='0';
+      setTimeout(function(){ toast.remove(); }, 300);
+    }, 2600);
+  }
+  document.querySelectorAll('a[href^="mailto:"]').forEach(function(a){
+    a.addEventListener('click', function(){
+      var email = a.getAttribute('href').replace(/^mailto:/, '').split('?')[0];
+      if(navigator.clipboard && navigator.clipboard.writeText){
+        navigator.clipboard.writeText(email).then(function(){
+          showToast('Copied ' + email + ' — opening your email app…');
+        }).catch(function(){
+          showToast('Email: ' + email);
+        });
+      } else {
+        showToast('Email: ' + email);
+      }
+      // Default mailto navigation (target="_top") still proceeds from here.
+    });
+  });
+
+  // Resume links: navigating a new tab straight to the published file's
+  // own URL can get blocked by the host (ERR_BLOCKED_BY_RESPONSE) — that
+  // endpoint isn't meant for direct top-level navigation. Fetching it from
+  // inside the page and opening the bytes as a local blob: URL sidesteps
+  // that entirely, with no save dialog either.
+  var RESUME_FILE = 'Utkarshsahai.pdf';
+  document.querySelectorAll('[data-resume-link]').forEach(function(link){
+    link.addEventListener('click', function(e){
+      e.preventDefault();
+      fetch(RESUME_FILE)
+        .then(function(resp){
+          if(!resp.ok) throw new Error('fetch failed');
+          return resp.blob();
+        })
+        .then(function(blob){
+          var pdfBlob = blob.type ? blob : blob.slice(0, blob.size, 'application/pdf');
+          var blobUrl = URL.createObjectURL(pdfBlob);
+          var win = window.open(blobUrl, '_blank');
+          if(!win){ showToast('Pop-up blocked — allow pop-ups to view the resume.'); }
+          setTimeout(function(){ URL.revokeObjectURL(blobUrl); }, 120000);
+        })
+        .catch(function(){
+          showToast('Could not open the resume — try again in a moment.');
+        });
+    });
+  });
+})();
+</script>
